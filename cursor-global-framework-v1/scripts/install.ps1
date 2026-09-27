@@ -20,13 +20,11 @@
 [CmdletBinding()]
 param(
     [Parameter(Position=0, Mandatory=$false)]
-    [Alias("target")]
     [string]$Target,
 
-    [Alias("global", "g")]
+    [Alias("g")]
     [switch]$Global,
 
-    [Alias("apply")]
     [switch]$Apply,
 
     [Alias("with-pd-farmacotecnico-specialist", "with-farmacotecnica-specialist")]
@@ -38,7 +36,7 @@ param(
     [Alias("with-all-specialists")]
     [switch]$WithAllSpecialists,
 
-    [Alias("h", "help")]
+    [Alias("h")]
     [switch]$Help
 )
 
