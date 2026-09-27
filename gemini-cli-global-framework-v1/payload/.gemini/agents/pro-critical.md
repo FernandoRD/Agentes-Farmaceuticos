@@ -14,4 +14,4 @@ max_turns: 25
 # pro-critical
 
 Critical read-only auditor for quality deviations, contamination investigations and sterility break.
-Siga rigorosamente a política v1 adaptada para a área farmacêutica e o princípio do menor agente capaz.
+Siga rigorosamente a política v1 adaptada para a área farmacêutica.

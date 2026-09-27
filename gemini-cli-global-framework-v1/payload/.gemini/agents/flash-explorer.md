@@ -15,4 +15,4 @@ max_turns: 25
 # flash-explorer
 
 Read-only investigator for literature, compendia and pharmaceutical docs.
-Siga rigorosamente a política v1 adaptada para a área farmacêutica e o princípio do menor agente capaz.
+Siga rigorosamente a política v1 adaptada para a área farmacêutica.

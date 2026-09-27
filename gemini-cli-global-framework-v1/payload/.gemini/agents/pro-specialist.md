@@ -14,4 +14,4 @@ max_turns: 25
 # pro-specialist
 
 Specialist in complex formulations, nanotech delivery systems and modified release.
-Siga rigorosamente a política v1 adaptada para a área farmacêutica e o princípio do menor agente capaz.
+Siga rigorosamente a política v1 adaptada para a área farmacêutica.

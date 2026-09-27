@@ -1,5 +1,5 @@
-<!-- PHARMACEUTICAL-AGENTS-FRAMEWORK:BEGIN v5 -->
-# Orquestração de Agentes Farmacêuticos v5
+<!-- PHARMACEUTICAL-AGENTS-FRAMEWORK:BEGIN v1 -->
+# Orquestração de Agentes Farmacêuticos v1
 
 Governança e registro central de papéis do ecossistema de agentes farmacêuticos.
 
@@ -15,4 +15,4 @@ Governança e registro central de papéis do ecossistema de agentes farmacêutic
 ## 2. Especialistas de Domínio Magistral
 - **`pd-farmacotecnico-specialist`:** Desenvolvimento farmacotécnico, controle de qualidade, estabilidade e P&D magistral brasileiro (RDC 67/2007).
 - **`visitacao-medica-specialist`:** Propaganda médica científica, farmacologia clínica aplicada, contorno de objeções e relacionamento consultivo com prescritores.
-<!-- PHARMACEUTICAL-AGENTS-FRAMEWORK:END v5 -->
+<!-- PHARMACEUTICAL-AGENTS-FRAMEWORK:END v1 -->

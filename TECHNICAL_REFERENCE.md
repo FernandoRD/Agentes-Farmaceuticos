@@ -1,8 +1,8 @@
-# Referência Técnica — Pharmaceutical AI Agent Framework v5
+# Referência Técnica — Pharmaceutical AI Agent Framework v1
 
 ## 1. Escopo e Objetivos no Domínio Farmacêutico
 
-A versão 5 (v5) do framework estabelece governança rigorosa para agentes de inteligência artificial aplicados à manipulação magistral, farmácia clínica e tecnologia farmacêutica. O objetivo é assegurar eficácia terapêutica, estabilidade físico-química e estrita conformidade com a legislação sanitária brasileira (**RDC 67/2007**, **Portaria 344/98**, **RDC 87/2008**, **Farmacopeia Brasileira 6ª Edição**).
+A versão 5 (v1) do framework estabelece governança rigorosa para agentes de inteligência artificial aplicados à manipulação magistral, farmácia clínica e tecnologia farmacêutica. O objetivo é assegurar eficácia terapêutica, estabilidade físico-química e estrita conformidade com a legislação sanitária brasileira (**RDC 67/2007**, **Portaria 344/98**, **RDC 87/2008**, **Farmacopeia Brasileira 6ª Edição**).
 
 O agente atua exclusivamente como assistente técnico e suporte à tomada de decisão da farmacêutica Responsável Técnica (RT) e aos prescritores habilitados, nunca substituindo a avaliação profissional humana nem emitindo prescrições autônomas.
 
@@ -91,7 +91,7 @@ Os pisos sanitários sobrepõem a nota numérica:
 ## 5. Arquitetura das Skills Especialistas
 
 Cada especialista de domínio segue a arquitetura canônica de 7 arquivos:
-1. `SKILL.md`: Manifesto com objetivos, limites operacionais, persona e conformidade v5.
+1. `SKILL.md`: Manifesto com objetivos, limites operacionais, persona e conformidade v1.
 2. `guia-1.md`: Procedimentos técnicos e fundamentos teóricos do primeiro pilar do domínio.
 3. `guia-2.md`: Práticas analíticas, cálculos ou farmacologia clínica aplicada.
 4. `guia-3.md`: Requisitos regulatórios, conformidade ANVISA e ética médica/farmacêutica.

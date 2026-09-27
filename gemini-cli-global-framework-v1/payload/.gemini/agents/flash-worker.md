@@ -14,4 +14,4 @@ max_turns: 25
 # flash-worker
 
 Fast worker for routine conversions, label formatting and authorized git publication.
-Siga rigorosamente a política v1 adaptada para a área farmacêutica e o princípio do menor agente capaz.
+Siga rigorosamente a política v1 adaptada para a área farmacêutica.
