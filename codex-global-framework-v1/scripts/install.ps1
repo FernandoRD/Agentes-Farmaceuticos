@@ -14,26 +14,12 @@
     Modo estrito de auditoria.
 .PARAMETER NoHook
     Não instala o hook de roteamento obrigatório.
-.PARAMETER WithZabbixSpecialist
-    Instala a extensão opcional Zabbix Specialist.
-.PARAMETER WithGrafanaSpecialist
-    Instala a extensão opcional Grafana Specialist (Grafana 12 / HTML Graphics).
-.PARAMETER WithAnsibleSpecialist
-    Instala a extensão opcional Ansible Specialist (Playbooks, Roles, Vault).
-.PARAMETER WithLokiSpecialist
-    Instala a extensão opcional Loki Specialist (LogQL, Promtail, Alloy).
-.PARAMETER WithPrometheusSpecialist
-    Instala a extensão opcional Prometheus Specialist (PromQL, Exporters, Alertmanager).
-.PARAMETER WithNetopsSpecialist
-    Instala a extensão opcional NetOps Specialist (SNMP, BGP, OSPF, VLANs).
-.PARAMETER WithSreSpecialist
-    Instala a extensão opcional SRE Incident Specialist (Incident Command, SLOs).
-.PARAMETER WithDbTuningSpecialist
-    Instala a extensão opcional Database Tuning Specialist (PostgreSQL, queries, locks).
-.PARAMETER WithProxmoxSpecialist
-    Instala a extensão opcional Proxmox Specialist (Proxmox VE 8.x/9.x, Corosync, Ceph, SDN, ZFS).
+.PARAMETER WithPdFarmacotecnicoSpecialist
+    Instala o especialista farmacotécnico.
+.PARAMETER WithVisitacaoMedicaSpecialist
+    Instala o especialista em visitação médica.
 .PARAMETER WithAllSpecialists
-    Instala simultaneamente todos os 9 especialistas de domínio disponíveis.
+    Instala simultaneamente os dois especialistas farmacêuticos disponíveis.
 .PARAMETER Help
     Exibe a mensagem de ajuda com todas as opções.
 #>
@@ -51,32 +37,11 @@ param(
     [switch]$AuditOnly,
     [switch]$Apply,
 
-    [Alias("with-zabbix-specialist")]
-    [switch]$WithZabbixSpecialist,
+    [Alias("with-pd-farmacotecnico-specialist")]
+    [switch]$WithPdFarmacotecnicoSpecialist,
 
-    [Alias("with-grafana-specialist")]
-    [switch]$WithGrafanaSpecialist,
-
-    [Alias("with-ansible-specialist")]
-    [switch]$WithAnsibleSpecialist,
-
-    [Alias("with-loki-specialist")]
-    [switch]$WithLokiSpecialist,
-
-    [Alias("with-prometheus-specialist")]
-    [switch]$WithPrometheusSpecialist,
-
-    [Alias("with-netops-specialist")]
-    [switch]$WithNetopsSpecialist,
-
-    [Alias("with-sre-specialist", "with-sre-incident-specialist")]
-    [switch]$WithSreSpecialist,
-
-    [Alias("with-db-tuning-specialist", "with-database-tuning-specialist")]
-    [switch]$WithDbTuningSpecialist,
-
-    [Alias("with-proxmox-specialist")]
-    [switch]$WithProxmoxSpecialist,
+    [Alias("with-visitacao-medica-specialist")]
+    [switch]$WithVisitacaoMedicaSpecialist,
 
     [Alias("with-all-specialists")]
     [switch]$WithAllSpecialists,
@@ -101,18 +66,9 @@ Opções gerais:
   -Help, -h, -?       Exibe esta mensagem de ajuda
 
 Especialistas de domínio opcionais:
-  -WithZabbixSpecialist          Instala o especialista Zabbix
-  -WithGrafanaSpecialist         Instala o especialista Grafana (Grafana 12 / HTML Graphics)
-  -WithAnsibleSpecialist         Instala o especialista Ansible (playbooks/roles/vault)
-  -WithLokiSpecialist            Instala o especialista Loki (LogQL/Promtail/Alloy)
-  -WithPrometheusSpecialist      Instala o especialista Prometheus (PromQL/exporters/alerting)
-  -WithNetopsSpecialist          Instala o especialista NetOps (SNMP/BGP/OSPF/VLANs)
-  -WithSreSpecialist             Instala o especialista SRE Incident (Incident Command/SLOs)
-                                 (alias: -WithSreIncidentSpecialist)
-  -WithDbTuningSpecialist        Instala o especialista Database Tuning (PostgreSQL/queries/locks)
-                                 (alias: -WithDatabaseTuningSpecialist)
-  -WithProxmoxSpecialist         Instala o especialista Proxmox VE (PVE 8.x/9.x/Ceph/SDN/HA)
-  -WithAllSpecialists            Instala todos os 9 especialistas de domínio acima
+  -WithPdFarmacotecnicoSpecialist Instala o especialista farmacotécnico
+  -WithVisitacaoMedicaSpecialist  Instala o especialista em visitação médica
+  -WithAllSpecialists             Instala os dois especialistas farmacêuticos
 "@
 }
 
@@ -144,7 +100,7 @@ function Get-OptionalInstallPlan([string]$Source, [string]$Destination) {
     foreach ($item in @(Get-ChildItem -LiteralPath $Source -Recurse -Force)) {
         if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw "Optional package source contains a link or symlink: $($item.FullName)" }
         if ($item.PSIsContainer) { continue }
-        $relative = $item.FullName.Substring($Source.Length).TrimStart('\\', '/')
+        $relative = $item.FullName.Substring($Source.Length).TrimStart('\', '/')
         $target = Join-Path $Destination $relative
         Assert-OptionalDirectory (Split-Path -Parent $target) "Optional package destination"
         if (Test-Path -LiteralPath $target) {
@@ -199,21 +155,14 @@ if ($isProject) {
     }
     $optionalPlan = @()
     $allSpecs = @(
-        @{ Name = "zabbix-specialist"; Enabled = ($WithZabbixSpecialist -or $WithAllSpecialists) }
-        @{ Name = "grafana-specialist"; Enabled = ($WithGrafanaSpecialist -or $WithAllSpecialists) }
-        @{ Name = "ansible-specialist"; Enabled = ($WithAnsibleSpecialist -or $WithAllSpecialists) }
-        @{ Name = "loki-specialist"; Enabled = ($WithLokiSpecialist -or $WithAllSpecialists) }
-        @{ Name = "prometheus-specialist"; Enabled = ($WithPrometheusSpecialist -or $WithAllSpecialists) }
-        @{ Name = "netops-specialist"; Enabled = ($WithNetopsSpecialist -or $WithAllSpecialists) }
-        @{ Name = "sre-incident-specialist"; Enabled = ($WithSreSpecialist -or $WithAllSpecialists) }
-        @{ Name = "database-tuning-specialist"; Enabled = ($WithDbTuningSpecialist -or $WithAllSpecialists) }
-        @{ Name = "proxmox-specialist"; Enabled = ($WithProxmoxSpecialist -or $WithAllSpecialists) }
+        @{ Name = "pd-farmacotecnico-specialist"; Enabled = ($WithPdFarmacotecnicoSpecialist -or $WithAllSpecialists) }
+        @{ Name = "visitacao-medica-specialist"; Enabled = ($WithVisitacaoMedicaSpecialist -or $WithAllSpecialists) }
     )
     foreach ($spec in $allSpecs) {
         if ($spec.Enabled) {
-            $optSrc = Join-Path $packageDir ("optional\" + $spec.Name)
+            $optSrc = Join-Path $packageDir ("optional\" + $spec.Name + "\.agents\skills\" + $spec.Name)
             if (Test-Path -LiteralPath $optSrc -PathType Container) {
-                $optionalPlan += Get-OptionalInstallPlan $optSrc $targetPath
+                $optionalPlan += Get-OptionalInstallPlan $optSrc (Join-Path $targetPath (".agents\skills\" + $spec.Name))
             }
         }
     }
@@ -249,15 +198,8 @@ if ($fullCodexHome -eq [IO.Path]::GetPathRoot($fullCodexHome) -or $fullSkillsHom
 $optionalPlan = @()
 if (-not $isProject) {
     $allSpecs = @(
-        @{ Name = "zabbix-specialist"; Enabled = ($WithZabbixSpecialist -or $WithAllSpecialists) }
-        @{ Name = "grafana-specialist"; Enabled = ($WithGrafanaSpecialist -or $WithAllSpecialists) }
-        @{ Name = "ansible-specialist"; Enabled = ($WithAnsibleSpecialist -or $WithAllSpecialists) }
-        @{ Name = "loki-specialist"; Enabled = ($WithLokiSpecialist -or $WithAllSpecialists) }
-        @{ Name = "prometheus-specialist"; Enabled = ($WithPrometheusSpecialist -or $WithAllSpecialists) }
-        @{ Name = "netops-specialist"; Enabled = ($WithNetopsSpecialist -or $WithAllSpecialists) }
-        @{ Name = "sre-incident-specialist"; Enabled = ($WithSreSpecialist -or $WithAllSpecialists) }
-        @{ Name = "database-tuning-specialist"; Enabled = ($WithDbTuningSpecialist -or $WithAllSpecialists) }
-        @{ Name = "proxmox-specialist"; Enabled = ($WithProxmoxSpecialist -or $WithAllSpecialists) }
+        @{ Name = "pd-farmacotecnico-specialist"; Enabled = ($WithPdFarmacotecnicoSpecialist -or $WithAllSpecialists) }
+        @{ Name = "visitacao-medica-specialist"; Enabled = ($WithVisitacaoMedicaSpecialist -or $WithAllSpecialists) }
     )
     foreach ($spec in $allSpecs) {
         if ($spec.Enabled) {

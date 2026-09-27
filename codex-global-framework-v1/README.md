@@ -69,6 +69,13 @@ No Windows (PowerShell):
 .\scripts\install.ps1 -Target "C:\Caminho\Do\Projeto" -WithAllSpecialists -Apply
 ```
 
+`--with-all-specialists` / `-WithAllSpecialists` instala exatamente
+`pd-farmacotecnico-specialist` e `visitacao-medica-specialist` em
+`.agents/skills/` do projeto. Para instalar apenas um, use
+`--with-pd-farmacotecnico-specialist` ou `--with-visitacao-medica-specialist`
+(no PowerShell: `-WithPdFarmacotecnicoSpecialist` ou
+`-WithVisitacaoMedicaSpecialist`).
+
 ## Validação e Conformidade
 Execute a suíte de testes de regressão offline:
 ```bash

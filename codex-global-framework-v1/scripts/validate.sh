@@ -47,6 +47,19 @@ for spec in pd-farmacotecnico-specialist visitacao-medica-specialist; do
     [ -z "$(find "$root/optional/$spec/.codex/agents" -name '*.toml' -print -quit 2>/dev/null)" ] || fail "optional $spec ships native agents"
 done
 
+project_dir="$(mktemp -d)"
+trap 'rm -rf "$project_dir"' EXIT
+mkdir "$project_dir/project"
+if ! "$root/scripts/install.sh" --target "$project_dir/project" --with-all-specialists --apply >/dev/null; then
+    fail 'project installation with all specialists failed'
+else
+    for spec in pd-farmacotecnico-specialist visitacao-medica-specialist; do
+        [ -f "$project_dir/project/.agents/skills/$spec/SKILL.md" ] || fail "project optional $spec skill missing"
+    done
+    [ ! -e "$project_dir/project/SKILL.md" ] || fail 'project installation leaked optional SKILL.md to project root'
+    [ "$(find "$project_dir/project/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" = 2 ] || fail 'project installation selected unexpected specialists'
+fi
+
 hook_output="$(sh "$root/.codex/hooks/mandatory-router.sh")" || fail 'hook execution failed'
 printf '%s' "$hook_output" | grep -q 'hookSpecificOutput' || fail 'invalid hook output'
 [ "${#hook_output}" -le 500 ] || fail 'hook output too long'

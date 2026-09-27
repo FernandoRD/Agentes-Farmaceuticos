@@ -29,6 +29,22 @@ foreach ($role in $expected.Keys) {
     Check ($content -match '(?m)^developer_instructions\s*=') "missing instructions for $role"
 }
 foreach ($script in 'install.ps1','diagnose.ps1','uninstall.ps1','validate.ps1') { Check (Test-Path (Join-Path $root "scripts/$script")) "missing PowerShell script: $script" }
+$projectRoot = Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid().ToString())
+try {
+    $project = Join-Path $projectRoot 'project'
+    New-Item -ItemType Directory -Path $project -Force | Out-Null
+    & (Join-Path $root 'scripts/install.ps1') -Target $project -WithAllSpecialists -Apply | Out-Null
+    foreach ($specialist in 'pd-farmacotecnico-specialist','visitacao-medica-specialist') {
+        Check (Test-Path (Join-Path $project ".agents/skills/$specialist/SKILL.md")) "project optional $specialist skill missing"
+    }
+    Check (-not (Test-Path (Join-Path $project 'SKILL.md'))) 'project installation leaked optional SKILL.md to project root'
+    $installed = @(Get-ChildItem (Join-Path $project '.agents/skills') -Directory -ErrorAction SilentlyContinue)
+    Check ($installed.Count -eq 2) 'project installation selected unexpected specialists'
+} catch {
+    Check $false "project installation with all specialists failed: $($_.Exception.Message)"
+} finally {
+    if (Test-Path $projectRoot) { Remove-Item -LiteralPath $projectRoot -Recurse -Force }
+}
 Get-Content (Join-Path $root MANIFEST.sha256) | ForEach-Object {
     if ($_ -match '^([0-9a-f]{64})  (.+)$') { $target = Join-Path $root $matches[2]; Check (Test-Path $target) "manifest target missing: $($matches[2])"; if (Test-Path $target) { Check ((Get-FileHash $target -Algorithm SHA256).Hash.ToLower() -eq $matches[1]) "manifest mismatch: $($matches[2])" } }
 }

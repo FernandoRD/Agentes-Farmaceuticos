@@ -46,18 +46,9 @@ Opções gerais:
   -h, --help          Exibe esta mensagem de ajuda
 
 Especialistas de domínio opcionais:
-  --with-zabbix-specialist          Instala o especialista Zabbix
-  --with-grafana-specialist         Instala o especialista Grafana (Grafana 12 / HTML Graphics)
-  --with-ansible-specialist         Instala o especialista Ansible (playbooks/roles/vault)
-  --with-loki-specialist            Instala o especialista Loki (LogQL/Promtail/Alloy)
-  --with-prometheus-specialist      Instala o especialista Prometheus (PromQL/exporters/alerting)
-  --with-netops-specialist          Instala o especialista NetOps (SNMP/BGP/OSPF/VLANs)
-  --with-sre-incident-specialist    Instala o especialista SRE Incident (Incident Command/SLOs)
-                                    (alias: --with-sre-specialist)
-  --with-database-tuning-specialist Instala o especialista Database Tuning (PostgreSQL/queries/locks)
-                                    (alias: --with-db-tuning-specialist)
-  --with-proxmox-specialist         Instala o especialista Proxmox VE (8.x/9.x, PBS, Ceph, ZFS, SDN)
-  --with-all-specialists            Instala todos os 9 especialistas de domínio acima
+  --with-pd-farmacotecnico-specialist Instala o especialista farmacotécnico
+  --with-visitacao-medica-specialist  Instala o especialista em visitação médica
+  --with-all-specialists              Instala os dois especialistas farmacêuticos
 EOF
     exit "${1:-0}"
 }
@@ -102,40 +93,12 @@ while [ $# -gt 0 ]; do
             APPLY=true
             shift
             ;;
-        --with-zabbix-specialist)
-            add_specialist "zabbix-specialist"
+        --with-pd-farmacotecnico-specialist)
+            add_specialist "pd-farmacotecnico-specialist"
             shift
             ;;
-        --with-grafana-specialist)
-            add_specialist "grafana-specialist"
-            shift
-            ;;
-        --with-ansible-specialist)
-            add_specialist "ansible-specialist"
-            shift
-            ;;
-        --with-loki-specialist)
-            add_specialist "loki-specialist"
-            shift
-            ;;
-        --with-prometheus-specialist)
-            add_specialist "prometheus-specialist"
-            shift
-            ;;
-        --with-netops-specialist)
-            add_specialist "netops-specialist"
-            shift
-            ;;
-        --with-sre-specialist|--with-sre-incident-specialist)
-            add_specialist "sre-incident-specialist"
-            shift
-            ;;
-        --with-db-tuning-specialist|--with-database-tuning-specialist)
-            add_specialist "database-tuning-specialist"
-            shift
-            ;;
-        --with-proxmox-specialist)
-            add_specialist "proxmox-specialist"
+        --with-visitacao-medica-specialist)
+            add_specialist "visitacao-medica-specialist"
             shift
             ;;
         --with-all-specialists)
@@ -309,9 +272,9 @@ if [ "$IS_PROJECT" = true ]; then
 
     if [ "${#OPTIONAL_SPECS[@]}" -gt 0 ]; then
         for spec in "${OPTIONAL_SPECS[@]}"; do
-            spec_src="$PACKAGE_DIR/optional/$spec"
+            spec_src="$PACKAGE_DIR/optional/$spec/.agents/skills/$spec"
             if [ -d "$spec_src" ]; then
-                scount="$(install_optional_files "$spec_src" "$TARGET")"
+                scount="$(install_optional_files "$spec_src" "$TARGET/.agents/skills/$spec")"
                 echo "Optional $spec installed: $scount file(s)."
             fi
         done
