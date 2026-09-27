@@ -1,0 +1,93 @@
+name: Release Windows installer
+
+on:
+  pull_request:
+    paths:
+      - 'windows-installer/**'
+      - '.github/workflows/release-windows-installer.yml'
+  push:
+    branches: ['main']
+    paths:
+      - 'windows-installer/**'
+      - '.github/workflows/release-windows-installer.yml'
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Agentes Farmacêuticos
+        uses: actions/checkout@v4
+        with:
+          path: pharmaceutical
+
+      - name: Require repository token for releases
+        if: github.ref_type == 'tag' && secrets.FRAMEWORK_REPOSITORIES_TOKEN == ''
+        shell: pwsh
+        run: throw 'FRAMEWORK_REPOSITORIES_TOKEN is required to assemble this release from the private Otimizações IA repository.'
+
+      - name: Checkout Otimizações IA
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        uses: actions/checkout@v4
+        with:
+          repository: FernandoRD/ai-agent-framework-v5
+          ref: 4fffa2622122dd5b45724d2653a9d7ff7622f617
+          path: optimizations
+          token: ${{ secrets.FRAMEWORK_REPOSITORIES_TOKEN }}
+
+      - name: Validate release version
+        id: version
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        shell: pwsh
+        run: |
+          $version = (Get-Content pharmaceutical/windows-installer/VERSION -Raw).Trim()
+          if ('${{ github.ref_type }}' -eq 'tag' -and '${{ github.ref_name }}' -ne "v$version") {
+            throw "Tag must be v$version."
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Validate payload inputs
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        shell: pwsh
+        run: >-
+          ./pharmaceutical/windows-installer/Validate-Local.ps1
+          -PharmaceuticalSource ./pharmaceutical
+          -OptimizationsSource ./optimizations
+          -InstallerVersion "${{ steps.version.outputs.version }}"
+
+      - name: Prepare installer payload
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        shell: pwsh
+        run: >-
+          ./pharmaceutical/windows-installer/Prepare-Payload.ps1
+          -PharmaceuticalSource ./pharmaceutical
+          -OptimizationsSource ./optimizations
+          -OutputPath ./pharmaceutical/windows-installer/staging
+
+      - name: Install Inno Setup
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        shell: pwsh
+        run: choco install innosetup --no-progress --yes
+
+      - name: Compile executable
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        shell: pwsh
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /DInstallerVersion=${{ steps.version.outputs.version }} ./pharmaceutical/windows-installer/UnifiedFrameworkInstaller.iss'
+
+      - name: Upload installer artifact
+        if: secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: pharmaceutical/windows-installer/output/Instalador-Framework-Windows-*.exe
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: github.ref_type == 'tag' && secrets.FRAMEWORK_REPOSITORIES_TOKEN != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          files: pharmaceutical/windows-installer/output/Instalador-Framework-Windows-*.exe
