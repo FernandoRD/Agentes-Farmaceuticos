@@ -42,10 +42,9 @@ var
 
 function CsvValues(Value: String): TArrayOfString;
 begin
-  if Value = '' then
-    SetArrayLength(Result, 0)
-  else
-    Result := StringSplit(Value, ',');
+  SetArrayLength(Result, 0);
+  if Value <> '' then
+    Result := StringSplit(Value, ',', stExcludeEmpty);
 end;
 
 function ProductId: String;
