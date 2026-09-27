@@ -45,8 +45,16 @@ do segundo repositório.
 5. O workflow **Release Windows installer** prepara o payload, compila com
    Inno Setup, publica o artefato e anexa o `.exe` à GitHub Release.
 
+Se uma tag já publicada tiver o workflow rejeitado antes de executar, não
+recrie nem mova a tag. Depois de publicar a correção do workflow na branch
+`main`, abra **Actions > Release Windows installer > Run workflow** e informe
+exatamente a tag original em `release_ref` (por exemplo, `v1.0.0`). A execução
+faz checkout dessa mesma tag, exige que ela corresponda ao `VERSION` e atualiza
+somente a GitHub Release daquela tag.
+
 Para o checkout privado de `FernandoRD/ai-agent-framework-v5`, configure o
 segredo `FRAMEWORK_REPOSITORIES_TOKEN` com permissão de leitura daquele
-repositório. Pull requests e pushes relevantes compilam quando o segredo está
-disponível; releases por tag falham com uma mensagem explícita se ele estiver
-ausente. Nenhum token é exibido nos logs.
+repositório. Pull requests, pushes relevantes e releases por tag falham com
+uma mensagem explícita se ele estiver ausente; isso evita que uma validação
+seja marcada como bem-sucedida sem montar o pacote completo. Nenhum token é
+exibido nos logs.
