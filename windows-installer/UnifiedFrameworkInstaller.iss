@@ -93,7 +93,7 @@ var
   Items: TArrayOfString;
   I: Integer;
 begin
-  SpecialistList.Clear;
+  SpecialistList.Items.Clear;
   Items := CsvValues(PlatformValue('specialists'));
   for I := 0 to GetArrayLength(Items) - 1 do
     SpecialistList.AddCheckBox(Items[I], '', 0, False, True, False, True, nil);
@@ -104,7 +104,7 @@ var
   Items: TArrayOfString;
   I: Integer;
 begin
-  PlatformCombo.Clear;
+  PlatformCombo.Items.Clear;
   Items := CsvValues(ProductValue('platforms'));
   PlatformIds := Items;
   for I := 0 to GetArrayLength(Items) - 1 do

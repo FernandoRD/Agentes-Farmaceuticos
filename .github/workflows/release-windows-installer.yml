@@ -14,9 +14,9 @@ on:
   workflow_dispatch:
     inputs:
       release_ref:
-        description: 'Tag de release a recuperar (deve corresponder ao VERSION, por exemplo v1.0.1)'
+        description: 'Tag de release a recuperar (deve corresponder ao VERSION, por exemplo v1.0.6)'
         required: true
-        default: 'v1.0.1'
+        default: 'v1.0.6'
         type: string
 
 permissions:
