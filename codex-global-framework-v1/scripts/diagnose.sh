@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Pure Bash diagnostic tool for Codex Global Framework v1
-# Zero Python required.
+# No interpreter dependency.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 PACKAGE_DIR="$(cd "$SCRIPT_DIR/.." && pwd -P)"

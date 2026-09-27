@@ -28,7 +28,7 @@ flowchart TD
 | [cursor-global-framework-v1](cursor-global-framework-v1/) | Cursor | Por projeto ou Global ($HOME) | Composer, Sonnet e Opus |
 | [codex-global-framework-v1](codex-global-framework-v1/) | Codex | Global (padrão) ou Por projeto | Luna, Terra e Sol |
 
-Os arquivos `.zip` na raiz do projeto (`gemini-cli-global-framework-v1.zip`, `claude-code-global-framework-v1.zip`, etc.) contêm as mesmas distribuições prontas para transporte e extração rápida.
+Os quatro arquivos `.zip` na raiz do projeto são artefatos versionados e contêm as respectivas distribuições prontas para transporte e extração rápida.
 
 ## Especialistas Farmacêuticos Opcionais
 
@@ -73,6 +73,12 @@ cd gemini-cli-global-framework-v1
 ./scripts/install.sh --global --with-all-specialists --apply
 ```
 
+Para Codex, execute no diretório do pacote Codex:
+```bash
+cd codex-global-framework-v1
+./scripts/install.sh --global --with-all-specialists --apply
+```
+
 No Windows (PowerShell):
 ```powershell
 cd gemini-cli-global-framework-v1
@@ -82,5 +88,10 @@ cd gemini-cli-global-framework-v1
 ## Validação e Conformidade
 Execute a suíte de testes de regressão offline:
 ```bash
-python3 scripts/test_install.py
+cd gemini-cli-global-framework-v1 && ./scripts/test_install.sh
+cd ../claude-code-global-framework-v1 && ./scripts/test_install.sh
+cd ../cursor-global-framework-v1 && ./scripts/test_install.sh
+cd ../codex-global-framework-v1 && ./scripts/validate.sh
 ```
+
+No Windows, execute `./scripts/test_install.ps1` nos pacotes Gemini, Claude e Cursor, ou `./scripts/validate.ps1` no pacote Codex. Os validadores PowerShell usam somente recursos nativos; a verificação de sintaxe Fish é limitada a sistemas com Fish instalado.

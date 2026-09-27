@@ -2,7 +2,7 @@
 
 ## 1. Escopo e Objetivos no Domínio Farmacêutico
 
-A versão 5 (v1) do framework estabelece governança rigorosa para agentes de inteligência artificial aplicados à manipulação magistral, farmácia clínica e tecnologia farmacêutica. O objetivo é assegurar eficácia terapêutica, estabilidade físico-química e estrita conformidade com a legislação sanitária brasileira (**RDC 67/2007**, **Portaria 344/98**, **RDC 87/2008**, **Farmacopeia Brasileira 6ª Edição**).
+A versão 1 (v1) do framework estabelece governança rigorosa para agentes de inteligência artificial aplicados à manipulação magistral, farmácia clínica e tecnologia farmacêutica. O objetivo é assegurar eficácia terapêutica, estabilidade físico-química e estrita conformidade com a legislação sanitária brasileira (**RDC 67/2007**, **Portaria 344/98**, **RDC 87/2008**, **Farmacopeia Brasileira 6ª Edição**).
 
 O agente atua exclusivamente como assistente técnico e suporte à tomada de decisão da farmacêutica Responsável Técnica (RT) e aos prescritores habilitados, nunca substituindo a avaliação profissional humana nem emitindo prescrições autônomas.
 

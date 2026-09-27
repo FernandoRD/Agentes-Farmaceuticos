@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Pure Bash installer for framework files (project or global home)
-# Default: audit-only, never overwrites conflicts. Zero Python required.
+# Default: audit-only, never overwrites conflicts. No interpreter dependency.
 
 TARGET=""
 IS_GLOBAL=false

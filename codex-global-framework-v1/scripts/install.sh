@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Pure Bash installer for Codex Global Framework v1
-# Zero Python required.
+# No interpreter dependency.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 PACKAGE_DIR="$(cd "$SCRIPT_DIR/.." && pwd -P)"
@@ -340,6 +340,46 @@ config_file="$CODEX_HOME/config.toml"
 standalone_dir="$CODEX_HOME/agents"
 layer_dir="$CODEX_HOME/agent-configs"
 legacy_codex_skills="$CODEX_HOME/skills"
+prepared_hooks=""
+
+cleanup_prepared_hooks() {
+    [ -z "$prepared_hooks" ] || rm -f "$prepared_hooks"
+}
+trap cleanup_prepared_hooks EXIT
+
+prepare_hooks_install() {
+    local output
+    output="$(mktemp "${TMPDIR:-/tmp}/codex-framework-hooks.XXXXXX")" || return 1
+    if ! jq '
+      def router_hook:
+        (.type? == "command") and
+        (((.command? // "") | contains("mandatory-router")) or
+         ((.commandWindows? // "") | contains("mandatory-router")));
+      def without_router:
+        map(if (.hooks? | type) == "array" then .hooks |= map(select(router_hook | not)) else . end) |
+        map(select((.hooks? | type) != "array" or (.hooks | length) > 0));
+      if type != "object" then error("hooks.json must be an object") else . end |
+      .hooks //= {} |
+      if (.hooks | type) != "object" then error("hooks must be an object") else . end |
+      .hooks.UserPromptSubmit //= [] |
+      if (.hooks.UserPromptSubmit | type) != "array" then error("UserPromptSubmit must be an array") else . end |
+      .hooks.UserPromptSubmit |= (without_router + [{"hooks": [{
+        "type": "command",
+        "command": "sh \"${CODEX_HOME:-$HOME/.codex}/hooks/mandatory-router.sh\"",
+        "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.codex\\hooks\\mandatory-router.ps1\"",
+        "timeout": 5,
+        "statusMessage": "Applying global routing policy"
+      }]}])
+    ' "$hooks_file" > "$output"; then
+        rm -f "$output"
+        return 1
+    fi
+    if ! jq -e 'type == "object" and (.hooks | type == "object") and (.hooks.UserPromptSubmit | type == "array")' "$output" >/dev/null; then
+        rm -f "$output"
+        return 1
+    fi
+    prepared_hooks="$output"
+}
 
 # Preflight audit
 FINDINGS=()
@@ -407,6 +447,21 @@ fi
 if [ "$AUDIT_ONLY" = true ]; then
     echo "Audit-only mode: no files changed."
     exit 0
+fi
+
+# A pre-existing hooks.json needs a JSON parser to preserve unrelated hooks.
+# Refuse before the apply phase rather than report a successful install without
+# registering mandatory-router.
+if [ "$NO_HOOK" = false ] && [ -f "$hooks_file" ]; then
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "Erro: hooks.json existente requer jq para registrar mandatory-router sem perder hooks existentes." >&2
+        echo "Instale jq, use --no-hook conscientemente, ou remova/mova hooks.json antes de executar." >&2
+        exit 1
+    fi
+    if ! prepare_hooks_install; then
+        echo "Erro: hooks.json inválido ou não pôde ser transformado; nenhuma alteração foi aplicada." >&2
+        exit 1
+    fi
 fi
 
 # Apply phase
@@ -574,36 +629,9 @@ if [ "$NO_HOOK" = false ]; then
 }
 EOF
     else
-        # If python3 or jq is available, use it for clean json manipulation, otherwise append hook
-        if command -v python3 >/dev/null 2>&1; then
-            python3 -c "
-import json
-with open('$hooks_file', 'r', encoding='utf-8-sig') as f:
-    try: data = json.load(f)
-    except Exception: data = {'description': 'User hooks.', 'hooks': {}}
-hooks = data.setdefault('hooks', {})
-ups = hooks.setdefault('UserPromptSubmit', [])
-ups[:] = [g for g in ups if 'mandatory-router' not in json.dumps(g)]
-ups.append({'hooks': [{'type': 'command', 'command': 'sh \"\${CODEX_HOME:-\$HOME/.codex}/hooks/mandatory-router.sh\"', 'commandWindows': 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\\\.codex\\\\hooks\\\\mandatory-router.ps1\"', 'timeout': 5, 'statusMessage': 'Applying global routing policy'}]})
-with open('$hooks_file', 'w', encoding='utf-8') as f:
-    json.dump(data, f, indent=2, ensure_ascii=False)
-    f.write('\n')
-"
-        elif command -v jq >/dev/null 2>&1; then
-            jq '
-              .hooks //= {} |
-              .hooks.UserPromptSubmit //= [] |
-              .hooks.UserPromptSubmit = ([.hooks.UserPromptSubmit[] | select(tostring | contains("mandatory-router") | not)] + [{
-                "hooks": [{
-                  "type": "command",
-                  "command": "sh \"${CODEX_HOME:-$HOME/.codex}/hooks/mandatory-router.sh\"",
-                  "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.codex\\hooks\\mandatory-router.ps1\"",
-                  "timeout": 5,
-                  "statusMessage": "Applying global routing policy"
-                }]
-              }])
-            ' "$hooks_file" > "$hooks_file.tmp" && mv "$hooks_file.tmp" "$hooks_file"
-        fi
+        # The complete, validated replacement was prepared before the apply phase.
+        mv "$prepared_hooks" "$hooks_file"
+        prepared_hooks=""
     fi
 fi
 

@@ -52,35 +52,23 @@ O repositório fornece especialistas de domínio farmacêutico opcionais, empaco
 
 Os instaladores são 100% nativos em Shell Script (`.sh`, `.fish`) e PowerShell (`.ps1`), sem dependência externa:
 
-### Instalação por Projeto:
+### Instalação por Projeto (Gemini CLI):
 ```bash
-# Gemini CLI / Antigravity com os dois especialistas farmacêuticos
-cd gemini-cli-global-framework-v1
 ./scripts/install.sh --target "/caminho/da/farmacia" --with-all-specialists --apply
-
-# Claude Code
-cd claude-code-global-framework-v1
-./scripts/install.sh --target "/caminho/da/farmacia" --with-pd-farmacotecnico-specialist --apply
-
-# Cursor
-cd cursor-global-framework-v1
-./scripts/install.sh --target "/caminho/da/farmacia" --with-visitacao-medica-specialist --apply
 ```
 
 ### Instalação Global no $HOME:
 ```bash
-cd gemini-cli-global-framework-v1
 ./scripts/install.sh --global --with-all-specialists --apply
 ```
 
 No Windows (PowerShell):
 ```powershell
-cd gemini-cli-global-framework-v1
 .\scripts\install.ps1 -Target "C:\Caminho\Da\Farmacia" -WithAllSpecialists -Apply
 ```
 
 ## Validação e Conformidade
 Execute a suíte de testes de regressão offline:
 ```bash
-python3 scripts/test_install.py
+./scripts/test_install.sh
 ```

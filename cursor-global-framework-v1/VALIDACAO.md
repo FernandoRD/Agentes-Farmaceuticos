@@ -1,2 +1,2 @@
 # Validação da Variante Cursor
-Testes com scripts/test_install.py.
+Execute `./scripts/test_install.sh` (Bash) ou `./scripts/test_install.ps1` (PowerShell).
