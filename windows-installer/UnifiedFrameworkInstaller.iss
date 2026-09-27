@@ -44,7 +44,7 @@ function CsvValues(Value: String): TArrayOfString;
 begin
   SetArrayLength(Result, 0);
   if Value <> '' then
-    Result := StringSplit(Value, ',', stExcludeEmpty);
+    Result := StringSplit(Value, ',');
 end;
 
 function ProductId: String;
