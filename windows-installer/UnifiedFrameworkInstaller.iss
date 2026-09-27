@@ -41,10 +41,31 @@ var
   ProductIds, PlatformIds: TArrayOfString;
 
 function CsvValues(Value: String): TArrayOfString;
+var
+  Item: String;
+  P, I: Integer;
 begin
   SetArrayLength(Result, 0);
-  if Value <> '' then
-    Result := StringSplit(Value, ',');
+  while Value <> '' do
+  begin
+    P := Pos(',', Value);
+    if P = 0 then
+    begin
+      Item := Value;
+      Value := '';
+    end
+    else
+    begin
+      Item := Copy(Value, 1, P - 1);
+      Delete(Value, 1, P);
+    end;
+    if Item <> '' then
+    begin
+      I := GetArrayLength(Result);
+      SetArrayLength(Result, I + 1);
+      Result[I] := Item;
+    end;
+  end;
 end;
 
 function ProductId: String;
