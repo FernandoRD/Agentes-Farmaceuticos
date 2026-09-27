@@ -32,8 +32,8 @@ gerado dentro desse mesmo staging, nunca no worktree.
 
 ## Releases
 
-`VERSION` é a fonte da versão do executável e começa em `1.0.0`. O release
-`v1.0.0` usa o commit fixado `4fffa2622122dd5b45724d2653a9d7ff7622f617` de
+`VERSION` é a fonte da versão do executável. O release
+`v1.0.1` usa o commit fixado `4fffa2622122dd5b45724d2653a9d7ff7622f617` de
 `FernandoRD/ai-agent-framework-v5`; portanto, ele não depende da branch padrão
 do segundo repositório.
 
@@ -41,14 +41,14 @@ do segundo repositório.
 2. Publique a mudança normalmente nos dois repositórios que compõem o pacote.
 3. Para uma nova versão, valide o commit desejado de Otimizações IA e atualize
    o `ref` fixado no workflow para esse SHA antes de criar a tag.
-4. Crie e envie a tag `v<versão>` neste repositório, por exemplo `v1.0.0`.
+4. Crie e envie a tag `v<versão>` neste repositório, por exemplo `v1.0.1`.
 5. O workflow **Release Windows installer** prepara o payload, compila com
    Inno Setup, publica o artefato e anexa o `.exe` à GitHub Release.
 
 Se uma tag já publicada tiver o workflow rejeitado antes de executar, não
 recrie nem mova a tag. Depois de publicar a correção do workflow na branch
 `main`, abra **Actions > Release Windows installer > Run workflow** e informe
-exatamente a tag original em `release_ref` (por exemplo, `v1.0.0`). A execução
+exatamente a tag original em `release_ref` (por exemplo, `v1.0.1`). A execução
 faz checkout dessa mesma tag, exige que ela corresponda ao `VERSION` e atualiza
 somente a GitHub Release daquela tag.
 
