@@ -12,13 +12,23 @@ $installer = Join-Path $scriptDir 'install.ps1'
 $temporary = Join-Path ([IO.Path]::GetTempPath()) ("pharmaceutical-framework-" + [guid]::NewGuid())
 try {
     $result = & $installer -Target $temporary 2>&1
-    if ($LASTEXITCODE -ne 0) { throw "audit invocation failed: $result" }
+    if (-not $?) { throw "audit invocation failed: $result" }
     if ($result -notmatch 'AUDIT') { throw 'installer did not report AUDIT mode' }
     if (Test-Path -LiteralPath $temporary) { throw 'audit invocation created target' }
-    foreach ($argument in @('-WithPdFarmacotecnicoSpecialist', '-WithVisitacaoMedicaSpecialist', '-WithAllSpecialists')) {
-        $result = & $installer -Target $temporary $argument -Apply 2>&1
-        if ($LASTEXITCODE -ne 0) { throw "apply invocation failed for $argument: $result" }
+    $cases = @(
+        @{ Switch = 'WithPdFarmacotecnicoSpecialist'; Skills = @('pd-farmacotecnico-specialist') },
+        @{ Switch = 'WithVisitacaoMedicaSpecialist'; Skills = @('visitacao-medica-specialist') },
+        @{ Switch = 'WithInteligenciaDadosVisitacaoSpecialist'; Skills = @('inteligencia-dados-visitacao-specialist') },
+        @{ Switch = 'WithAllSpecialists'; Skills = @('pd-farmacotecnico-specialist', 'visitacao-medica-specialist', 'inteligencia-dados-visitacao-specialist') }
+    )
+    foreach ($case in $cases) {
+        $argument = $case.Switch
+        $parameters = @{ Target = $temporary; Apply = $true; $argument = $true }
+        $result = & $installer @parameters 2>&1
+        if (-not $?) { throw "apply invocation failed for ${argument}: $result" }
         if ($result -notmatch 'APPLY') { throw "installer did not report APPLY mode for $argument" }
+        $tool = Get-ChildItem -LiteralPath $temporary -Directory -Force | Where-Object { $_.Name.StartsWith('.') } | Select-Object -First 1
+        foreach ($skill in $case.Skills) { if (-not (Test-Path -LiteralPath (Join-Path $tool.FullName "skills/$skill/SKILL.md"))) { throw "optional skill was not installed: $skill" } }
     }
     Write-Output "OK: $(Split-Path -Leaf (Split-Path -Parent $scriptDir)) native PowerShell installer"
 }

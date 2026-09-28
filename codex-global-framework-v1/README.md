@@ -48,6 +48,12 @@ O repositório fornece especialistas de domínio farmacêutico opcionais, empaco
    - Protocolo estruturado de visita em **4 fases**: Pre-call (planejamento), Abordagem/Abertura (pitch de 30s + pergunta investigativa), Apresentação de Soluções e Fechamento/Next Steps (sem pressão, respeitando a livre escolha do paciente).
    - Módulo de contorno de objeções científicas e simulação interativa de **Roleplay**.
 
+3. **`inteligencia-dados-visitacao-specialist` (Inteligência de Dados de Visitação Médica — BS Pharma)**:
+   - Converte dados do Manda Visita em diagnóstico, oportunidade, prioridade e plano de ação comercial.
+   - Analisa visitação, orçamento efetuado/aprovado/rejeitado, conversão, cobertura, território, tendência, churn e reativação.
+   - Preserva integridade analítica: dados parciais são explicitados, causas não são inventadas e associação temporal não é apresentada como causalidade.
+   - Inclui radar diário, matrizes Demanda × Conversão e Frequência × Resultado, com entregas acionáveis e rastreáveis.
+
 ## Como Instalar
 
 Os instaladores são 100% nativos em Shell Script (`.sh`, `.fish`) e PowerShell (`.ps1`), sem dependência externa:
@@ -69,12 +75,13 @@ No Windows (PowerShell):
 .\scripts\install.ps1 -Target "C:\Caminho\Do\Projeto" -WithAllSpecialists -Apply
 ```
 
-`--with-all-specialists` / `-WithAllSpecialists` instala exatamente
-`pd-farmacotecnico-specialist` e `visitacao-medica-specialist` em
+`--with-all-specialists` / `-WithAllSpecialists` instala
+`pd-farmacotecnico-specialist`, `visitacao-medica-specialist` e
+`inteligencia-dados-visitacao-specialist` em
 `.agents/skills/` do projeto. Para instalar apenas um, use
-`--with-pd-farmacotecnico-specialist` ou `--with-visitacao-medica-specialist`
+`--with-pd-farmacotecnico-specialist`, `--with-visitacao-medica-specialist` ou `--with-inteligencia-dados-visitacao-specialist`
 (no PowerShell: `-WithPdFarmacotecnicoSpecialist` ou
-`-WithVisitacaoMedicaSpecialist`).
+`-WithVisitacaoMedicaSpecialist` ou `-WithInteligenciaDadosVisitacaoSpecialist`).
 
 ## Validação e Conformidade
 Execute a suíte de testes de regressão offline:

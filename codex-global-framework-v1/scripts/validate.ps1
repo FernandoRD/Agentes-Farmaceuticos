@@ -34,12 +34,12 @@ try {
     $project = Join-Path $projectRoot 'project'
     New-Item -ItemType Directory -Path $project -Force | Out-Null
     & (Join-Path $root 'scripts/install.ps1') -Target $project -WithAllSpecialists -Apply | Out-Null
-    foreach ($specialist in 'pd-farmacotecnico-specialist','visitacao-medica-specialist') {
+    foreach ($specialist in 'pd-farmacotecnico-specialist','visitacao-medica-specialist','inteligencia-dados-visitacao-specialist') {
         Check (Test-Path (Join-Path $project ".agents/skills/$specialist/SKILL.md")) "project optional $specialist skill missing"
     }
     Check (-not (Test-Path (Join-Path $project 'SKILL.md'))) 'project installation leaked optional SKILL.md to project root'
     $installed = @(Get-ChildItem (Join-Path $project '.agents/skills') -Directory -ErrorAction SilentlyContinue)
-    Check ($installed.Count -eq 2) 'project installation selected unexpected specialists'
+    Check ($installed.Count -eq 3) 'project installation selected unexpected specialists'
 } catch {
     Check $false "project installation with all specialists failed: $($_.Exception.Message)"
 } finally {

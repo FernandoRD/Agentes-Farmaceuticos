@@ -15,4 +15,5 @@ Governança e registro central de papéis do ecossistema de agentes farmacêutic
 ## 2. Especialistas de Domínio Magistral
 - **`pd-farmacotecnico-specialist`:** Desenvolvimento farmacotécnico, controle de qualidade, estabilidade e P&D magistral brasileiro (RDC 67/2007).
 - **`visitacao-medica-specialist`:** Propaganda médica científica, farmacologia clínica aplicada, contorno de objeções e relacionamento consultivo com prescritores.
+- **`inteligencia-dados-visitacao-specialist`:** Inteligência comercial, CRM e análise de dados da visitação médica, convertendo dados de demanda, conversão e cobertura em prioridades e planos de ação.
 <!-- PHARMACEUTICAL-AGENTS-FRAMEWORK:END v1 -->

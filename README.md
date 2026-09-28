@@ -48,13 +48,18 @@ O repositório fornece especialistas de domínio farmacêutico opcionais, empaco
    - Protocolo estruturado de visita em **4 fases**: Pre-call (planejamento), Abordagem/Abertura (pitch de 30s + pergunta investigativa), Apresentação de Soluções e Fechamento/Next Steps (sem pressão, respeitando a livre escolha do paciente).
    - Módulo de contorno de objeções científicas e simulação interativa de **Roleplay**.
 
+3. **`inteligencia-dados-visitacao-specialist` (Especialista Sênior em Inteligência de Dados de Visitação Médica)**:
+   - Converte dados de demanda, cobertura, conversão e relacionamento do Manda Visita em diagnóstico comercial.
+   - Segmentação de prescritores, priorização de oportunidades, radar diário e planos de ação mensuráveis.
+   - Distingue fatos observados, inferências operacionais e hipóteses; não presume causalidade sem evidência.
+
 ## Como Instalar
 
 Os instaladores são 100% nativos em Shell Script (`.sh`, `.fish`) e PowerShell (`.ps1`), sem dependência externa:
 
 ### Instalação por Projeto:
 ```bash
-# Gemini CLI / Antigravity com os dois especialistas farmacêuticos
+# Gemini CLI / Antigravity com todos os especialistas farmacêuticos
 cd gemini-cli-global-framework-v1
 ./scripts/install.sh --target "/caminho/da/farmacia" --with-all-specialists --apply
 
@@ -78,6 +83,8 @@ Para Codex, execute no diretório do pacote Codex:
 cd codex-global-framework-v1
 ./scripts/install.sh --global --with-all-specialists --apply
 ```
+
+O especialista de inteligência de dados também pode ser instalado isoladamente com `--with-inteligencia-dados-visitacao-specialist`.
 
 No Windows (PowerShell):
 ```powershell

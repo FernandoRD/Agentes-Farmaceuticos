@@ -42,7 +42,7 @@ for name in security-review code-review dependency-review documentation; do
 done
 [ "$(find "$root/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" = 4 ] || fail 'unexpected Skills'
 
-for spec in pd-farmacotecnico-specialist visitacao-medica-specialist; do
+for spec in pd-farmacotecnico-specialist visitacao-medica-specialist inteligencia-dados-visitacao-specialist; do
     [ -f "$root/optional/$spec/.agents/skills/$spec/SKILL.md" ] || fail "optional $spec skill missing"
     [ -z "$(find "$root/optional/$spec/.codex/agents" -name '*.toml' -print -quit 2>/dev/null)" ] || fail "optional $spec ships native agents"
 done
@@ -53,11 +53,11 @@ mkdir "$project_dir/project"
 if ! "$root/scripts/install.sh" --target "$project_dir/project" --with-all-specialists --apply >/dev/null; then
     fail 'project installation with all specialists failed'
 else
-    for spec in pd-farmacotecnico-specialist visitacao-medica-specialist; do
+    for spec in pd-farmacotecnico-specialist visitacao-medica-specialist inteligencia-dados-visitacao-specialist; do
         [ -f "$project_dir/project/.agents/skills/$spec/SKILL.md" ] || fail "project optional $spec skill missing"
     done
     [ ! -e "$project_dir/project/SKILL.md" ] || fail 'project installation leaked optional SKILL.md to project root'
-    [ "$(find "$project_dir/project/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" = 2 ] || fail 'project installation selected unexpected specialists'
+    [ "$(find "$project_dir/project/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" = 3 ] || fail 'project installation selected unexpected specialists'
 fi
 
 hook_output="$(sh "$root/.codex/hooks/mandatory-router.sh")" || fail 'hook execution failed'

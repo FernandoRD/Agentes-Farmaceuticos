@@ -90,7 +90,7 @@ Os pisos sanitários sobrepõem a nota numérica:
 
 ## 5. Arquitetura das Skills Especialistas
 
-Cada especialista de domínio segue a arquitetura canônica de 7 arquivos:
+Cada especialista de domínio (atualmente `pd-farmacotecnico-specialist`, `visitacao-medica-specialist` e `inteligencia-dados-visitacao-specialist`) segue a arquitetura canônica de 7 arquivos:
 1. `SKILL.md`: Manifesto com objetivos, limites operacionais, persona e conformidade v1.
 2. `guia-1.md`: Procedimentos técnicos e fundamentos teóricos do primeiro pilar do domínio.
 3. `guia-2.md`: Práticas analíticas, cálculos ou farmacologia clínica aplicada.

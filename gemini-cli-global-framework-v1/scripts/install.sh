@@ -11,6 +11,7 @@ OPTIONAL_SPECS=()
 ALL_KNOWN_SPECS=(
     "pd-farmacotecnico-specialist"
     "visitacao-medica-specialist"
+    "inteligencia-dados-visitacao-specialist"
 )
 
 add_specialist() {
@@ -38,6 +39,7 @@ Especialistas farmacêuticos opcionais:
                                        (alias: --with-farmacotecnica-specialist)
   --with-visitacao-medica-specialist   Instala o especialista em Visitação Médica e Relacionamento Prescritor
                                        (alias: --with-visitacao-specialist)
+  --with-inteligencia-dados-visitacao-specialist Instala o especialista em Inteligência de Dados de Visitação Médica
   --with-all-specialists               Instala todos os especialistas farmacêuticos
 EOF
     exit "${1:-0}"
@@ -72,6 +74,10 @@ while [ $# -gt 0 ]; do
             ;;
         --with-visitacao-medica-specialist|--with-visitacao-specialist)
             add_specialist "visitacao-medica-specialist"
+            shift
+            ;;
+        --with-inteligencia-dados-visitacao-specialist|--with-inteligencia-dados-visitacao)
+            add_specialist "inteligencia-dados-visitacao-specialist"
             shift
             ;;
         --with-all-specialists)

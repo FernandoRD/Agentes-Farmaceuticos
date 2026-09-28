@@ -18,8 +18,10 @@
     Instala o especialista farmacotécnico.
 .PARAMETER WithVisitacaoMedicaSpecialist
     Instala o especialista em visitação médica.
+.PARAMETER WithInteligenciaDadosVisitacaoSpecialist
+    Instala o especialista em inteligência de dados de visitação médica.
 .PARAMETER WithAllSpecialists
-    Instala simultaneamente os dois especialistas farmacêuticos disponíveis.
+    Instala simultaneamente todos os especialistas farmacêuticos disponíveis.
 .PARAMETER Help
     Exibe a mensagem de ajuda com todas as opções.
 #>
@@ -42,6 +44,9 @@ param(
 
     [Alias("with-visitacao-medica-specialist")]
     [switch]$WithVisitacaoMedicaSpecialist,
+
+    [Alias("with-inteligencia-dados-visitacao-specialist")]
+    [switch]$WithInteligenciaDadosVisitacaoSpecialist,
 
     [Alias("with-all-specialists")]
     [switch]$WithAllSpecialists,
@@ -68,7 +73,8 @@ Opções gerais:
 Especialistas de domínio opcionais:
   -WithPdFarmacotecnicoSpecialist Instala o especialista farmacotécnico
   -WithVisitacaoMedicaSpecialist  Instala o especialista em visitação médica
-  -WithAllSpecialists             Instala os dois especialistas farmacêuticos
+  -WithInteligenciaDadosVisitacaoSpecialist Instala o especialista em inteligência de dados de visitação
+  -WithAllSpecialists             Instala todos os especialistas farmacêuticos
 "@
 }
 
@@ -157,6 +163,7 @@ if ($isProject) {
     $allSpecs = @(
         @{ Name = "pd-farmacotecnico-specialist"; Enabled = ($WithPdFarmacotecnicoSpecialist -or $WithAllSpecialists) }
         @{ Name = "visitacao-medica-specialist"; Enabled = ($WithVisitacaoMedicaSpecialist -or $WithAllSpecialists) }
+        @{ Name = "inteligencia-dados-visitacao-specialist"; Enabled = ($WithInteligenciaDadosVisitacaoSpecialist -or $WithAllSpecialists) }
     )
     foreach ($spec in $allSpecs) {
         if ($spec.Enabled) {
@@ -200,6 +207,7 @@ if (-not $isProject) {
     $allSpecs = @(
         @{ Name = "pd-farmacotecnico-specialist"; Enabled = ($WithPdFarmacotecnicoSpecialist -or $WithAllSpecialists) }
         @{ Name = "visitacao-medica-specialist"; Enabled = ($WithVisitacaoMedicaSpecialist -or $WithAllSpecialists) }
+        @{ Name = "inteligencia-dados-visitacao-specialist"; Enabled = ($WithInteligenciaDadosVisitacaoSpecialist -or $WithAllSpecialists) }
     )
     foreach ($spec in $allSpecs) {
         if ($spec.Enabled) {

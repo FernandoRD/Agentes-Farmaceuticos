@@ -48,6 +48,11 @@ O repositório fornece especialistas de domínio farmacêutico opcionais, empaco
    - Protocolo estruturado de visita em **4 fases**: Pre-call (planejamento), Abordagem/Abertura (pitch de 30s + pergunta investigativa), Apresentação de Soluções e Fechamento/Next Steps (sem pressão, respeitando a livre escolha do paciente).
    - Módulo de contorno de objeções científicas e simulação interativa de **Roleplay**.
 
+3. **`inteligencia-dados-visitacao-specialist` (Inteligência de Dados de Visitação Médica — BS Pharma)**:
+   - Converte dados do Manda Visita em diagnóstico, oportunidade, prioridade e plano de ação comercial.
+   - Analisa visitação, orçamentos, conversão, cobertura, território, tendência, churn e reativação sem inventar causas ou causalidade.
+   - Inclui radar diário e matrizes Demanda × Conversão e Frequência × Resultado.
+
 ## Como Instalar
 
 Os instaladores são 100% nativos em Shell Script (`.sh`, `.fish`) e PowerShell (`.ps1`), sem dependência externa:

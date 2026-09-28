@@ -20,6 +20,7 @@ dot="$(tool_dir "$target")"
 [ -n "$dot" ] || fail 'tool directory was not installed'
 [ ! -e "$dot/skills/pd-farmacotecnico-specialist/SKILL.md" ] || fail 'PD specialist is not opt-in'
 [ ! -e "$dot/skills/visitacao-medica-specialist/SKILL.md" ] || fail 'visitation specialist is not opt-in'
+[ ! -e "$dot/skills/inteligencia-dados-visitacao-specialist/SKILL.md" ] || fail 'data intelligence specialist is not opt-in'
 while IFS= read -r -d '' source; do
     relative="${source#"$package_dir/payload/"}"
     cmp -s "$source" "$target/$relative" || fail "payload file differs: $relative"
@@ -34,10 +35,16 @@ dot_visit="$(tool_dir "$visit")"
 [ -f "$dot_visit/skills/visitacao-medica-specialist/SKILL.md" ] || fail 'visitation specialist was not installed'
 [ ! -e "$dot_visit/skills/pd-farmacotecnico-specialist/SKILL.md" ] || fail 'PD specialist was installed unexpectedly'
 
+data="$tmp/data"
+run "$data" --with-inteligencia-dados-visitacao-specialist --apply >/dev/null
+dot_data="$(tool_dir "$data")"
+[ -f "$dot_data/skills/inteligencia-dados-visitacao-specialist/SKILL.md" ] || fail 'data intelligence specialist was not installed'
+[ ! -e "$dot_data/skills/visitacao-medica-specialist/SKILL.md" ] || fail 'visitation specialist was installed unexpectedly'
+
 all="$tmp/all"
 run "$all" --with-all-specialists --apply >/dev/null
 dot="$(tool_dir "$all")"
-for specialist in pd-farmacotecnico-specialist visitacao-medica-specialist; do
+for specialist in pd-farmacotecnico-specialist visitacao-medica-specialist inteligencia-dados-visitacao-specialist; do
     [ -f "$dot/skills/$specialist/SKILL.md" ] || fail "$specialist was not installed"
 done
 
